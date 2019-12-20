@@ -7,27 +7,44 @@ const { Pool } = require("pg");
 
 function AsMVT(uri, callback) {
   var parsedUrl = url.parse(uri, true);
-  this._functionName = parsedUrl.query.function || "gettile";
-  //TODO: user, host, database, etc
+  const functionName = parsedUrl.query.function || "gettile";
+  this._query = "select " + functionName + "($1, $2, $3)";
+  this.pool = new Pool({
+    user: parsedUrl.query.user || process.env.PGUSER,
+    host: parsedUrl.query.host || process.env.PGHOST,
+    database: parsedUrl.query.database || process.env.PGDATABASE,
+    password: parsedUrl.query.password || process.env.PGPASSWORD,
+    port: parsedUrl.query.port || process.env.PGPORT
+  });
   callback(null, this);
 }
 
 AsMVT.prototype.getTile = function(z, x, y, callback) {
-  // TODO: get tile
-  return zlib.gzip(compositeTile.getData(), function(err, pbfz) {
+  this.pool.query(this._query, [z, x, y], (err, res) => {
     if (err) {
       return callback(err);
     }
-    return callback(null, pbfz, {
-      "Content-Encoding": "gzip",
-      "Content-Type": "application/x-protobuf"
+    return zlib.gzip(res.rows[0][0], function(err, pbfz) {
+      if (err) {
+        return callback(err);
+      }
+      return callback(null, pbfz, {
+        "Content-Encoding": "gzip",
+        "Content-Type": "application/x-protobuf"
+      });
     });
   });
 };
 
 AsMVT.prototype.getInfo = function(callback) {
-  //TODO: how do we do this?
-  callback(null, {});
+  callback(null, {
+    name: "tilelive_AsMVT tileset",
+    minzoom: 0,
+    maxzoom: 12,
+    center: [0, 0, 12],
+    bounds: [-180, -85.0511, 180, 85.0511],
+    format: "pbf"
+  });
 };
 
 /*
