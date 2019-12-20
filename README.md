@@ -26,4 +26,4 @@ $$ LANGUAGE SQL STABLE RETURNS NULL ON NULL INPUT;
 - `database` - database name, defaults to `PGDATABASE` environment variable if not provided.
 - `password` - postgres password, defaults to `PGPASSWORD` environment variable if not provided.
 - `port` - postgres port, defaults to `PGPORT` environment variable if not provided.
-- `function` - name of database function that returns tile data, defaults to `gettile` if not provided.
+- `function` - REQUIRED - name of database function that returns tile data.

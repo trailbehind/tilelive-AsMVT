@@ -6,8 +6,11 @@ const zlib = require("zlib");
 const { Pool } = require("pg");
 
 function AsMVT(uri, callback) {
-  var parsedUrl = url.parse(uri, true);
-  const functionName = parsedUrl.query.function || "gettile";
+  const parsedUrl = url.parse(uri, true);
+  const functionName = parsedUrl.query.function;
+  if (functionName === null || functionName === undefined) {
+    throw "function parameter is required";
+  }
   this._query = "select " + functionName + "($1, $2, $3)";
   this.pool = new Pool({
     user: parsedUrl.query.user || process.env.PGUSER,
