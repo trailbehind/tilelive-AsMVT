@@ -16,7 +16,13 @@ function AsMVT(uri, callback) {
     password: parsedUrl.query.password || process.env.PGPASSWORD,
     port: parsedUrl.query.port || process.env.PGPORT
   });
-  callback(null, this);
+  // Verify connection details are correct
+  this.pool.query("Select postgis_version()", (err, res) => {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, this);
+  });
 }
 
 AsMVT.prototype.getTile = function(z, x, y, callback) {
