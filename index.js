@@ -7,11 +7,11 @@ const { Pool } = require("pg");
 
 function AsMVT(uri, callback) {
   const parsedUrl = url.parse(uri, true);
-  const functionName = parsedUrl.query.function;
-  if (functionName === null || functionName === undefined) {
+  this._functionName = parsedUrl.query.function;
+  if (this._functionName === null || this._functionName === undefined) {
     throw "function parameter is required";
   }
-  this._query = "select " + functionName + "($1, $2, $3)";
+  this._query = "select " + this._functionName + "($1, $2, $3)";
   this.pool = new Pool({
     user: parsedUrl.query.user || process.env.PGUSER,
     host: parsedUrl.query.host || process.env.PGHOST,
@@ -33,7 +33,16 @@ AsMVT.prototype.getTile = function(z, x, y, callback) {
     if (err) {
       return callback(err);
     }
-    return zlib.gzip(res.rows[0][0], function(err, pbfz) {
+    if (
+      res.rows.length != 1 ||
+      res.rows[0][this._functionName] == undefined ||
+      res.rows[0][this._functionName] == null
+    ) {
+      return callback(
+        "Query returned incorrect values, Expceting 1 row with 1 column."
+      );
+    }
+    return zlib.gzip(res.rows[0][this._functionName], function(err, pbfz) {
       if (err) {
         return callback(err);
       }
