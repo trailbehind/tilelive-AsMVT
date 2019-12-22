@@ -1,0 +1,37 @@
+{
+  "name": "tilelive-asmvt",
+  "version": "0.0.1",
+  "description": "Tilelive module for generating Mapbox Vector Tiles from a Postgres DB using ST_AsMVT.",
+  "license": "MIT",
+  "dependencies": {
+    "pg": "^7.0.0",
+    "@mapbox/tilelive": "^6.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trailbehind/tilelive-asmvt.git"
+  },
+  "keywords": [
+    "tilelive",
+    "mvt",
+    "postgis"
+  ],
+  "_npmUser": {
+    "name": "jessecrocker",
+    "email": "jesse@gaiagps.com"
+  },
+  "author": "Jesse Crocker",
+  "maintainers": [
+    {
+      "name": "Jesse Crocker",
+      "email": "jesse@gaiagps.com"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/trailbehind/tilelive-asmvt/issues"
+  },
+  "homepage": "https://github.com/trailbehind/tilelive-asmvt"
+}
