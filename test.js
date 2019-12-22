@@ -1,11 +1,12 @@
 var asmvt = require("./index");
 
-new asmvt(
-  "asmvt:///?host=localhost&user=postgres&database=osm&port=15432",
-  function(err, tiler) {
-    console.log(tiler);
-    tiler.getTile(0, 0, 0, function(err, tile) {
-      console.log(err, tile);
-    });
+new asmvt("asmvt:///?function=gettile", function(err, tiler) {
+  if (err) {
+    console.log(err);
+    return;
   }
-);
+  console.log(tiler);
+  tiler.getTile(10, 1000, 1000, function(err, tile) {
+    console.log(err, tile);
+  });
+});
