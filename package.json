@@ -4,7 +4,7 @@
   "description": "Tilelive module for generating Mapbox Vector Tiles from a Postgres DB using ST_AsMVT.",
   "license": "MIT",
   "dependencies": {
-    "pg": "^7.0.0",
+    "pg": "^8.11.0",
     "@mapbox/tilelive": "^6.0.0"
   },
   "scripts": {
